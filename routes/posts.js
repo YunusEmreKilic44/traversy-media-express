@@ -40,12 +40,27 @@ router.post("/", (req, res) => {
   };
 
   if (!newPost.title) {
-    return res.status(400).json({ message: "Please include a title" });
+    return res.status(400).json({ msg: "Please include a title" });
   }
 
   posts.push(newPost);
 
   res.status(201).json(posts);
+});
+
+// Update Post
+
+router.put("/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const post = posts.find((post) => post.id === id);
+
+  if (!post) {
+    return res
+      .status(404)
+      .json({ msg: `A post with the id of ${id} was not found` });
+  }
+  post.title = req.body.title;
+  res.status(200).json(post);
 });
 
 export default router;
